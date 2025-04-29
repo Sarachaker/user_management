@@ -46,7 +46,20 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     email: EmailStr = Field(..., example="john.doe@example.com")
-    password: str = Field(..., example="Secure*1234")
+    password: str = Field(...,min_length=8, example="Secure*1234")
+    @validator('password')
+    def validate_password(cls,va):
+        if len(va) < 8:
+            raise ValueError("Password not 8 characters long")
+        if not re.search(r"[A-Z]", va):
+            raise ValueError("Password not having atleast one uppercase letter")
+        if not re.search(r"[a-z]", va):
+            raise ValueError("Password not having atleast one lowercase letter")
+        if not re.search(r"\d", va):
+            raise ValueError("Password not having atleast one digit")
+        if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", va):
+            raise ValueError("Password not having atleast one special character")
+        return va
 
 class UserUpdate(UserBase):
     email: Optional[EmailStr] = Field(None, example="john.doe@example.com")
