@@ -59,7 +59,7 @@ def email_service():
 @pytest.fixture(scope="function")
 async def async_client(db_session):
     transport = ASGITransport(app)
-     async with AsyncClient(transport=transport, base_url="http://testserver") as client:
+    async with AsyncClient(transport=transport, base_url="http://testserver") as client:
         app.dependency_overrides[get_db] = lambda: db_session
         try:
             yield client
