@@ -39,6 +39,21 @@ services:
         condition: service_healthy
     networks:
       - app-network
+  minio:
+    image: minio/minio:latest
+    hostname: minio
+    command: minio server --console-address ":9001" /data
+    ports:
+      - 9000:9000 # MinIO API
+      - 9001:9001 # MinIO Console
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    restart: always
+    volumes:
+      - ./minio_data:/data
+    networks:
+      - app-network  
 
   nginx:
     image: nginx:latest
@@ -54,6 +69,7 @@ services:
 volumes:
   postgres-data:
   pgadmin-data:
+  minio_data:
 
 networks:
   app-network:
