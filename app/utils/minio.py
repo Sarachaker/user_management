@@ -54,3 +54,8 @@ class ProfileImageService:
             object_name=filename,
             expires=expiry,
         )
+_service = ProfileImageService()
+
+# exactly the old names, just bound to the new class underneath
+store_image           = _service.store_image
+generate_presigned_url = _service.generate_presigned_url
