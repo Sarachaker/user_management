@@ -29,7 +29,7 @@ def test_upload_profile_picture_invalid_file_type(mock_minio_client):
 
     with pytest.raises(ValueError, match="Unsupported file type"):
         upload_profile_picture(file_data, file_name)
-        
+
 def test_upload_profile_picture_success(mock_minio_client, mock_settings):
     file_data = io.BytesIO(b"mock file content")
     file_name = "profile-picture.jpg"
@@ -101,8 +101,8 @@ def test_upload_profile_picture_special_characters(mock_minio_client, mock_setti
     )
     expected_url = f"{mock_settings['MINIO_ENDPOINT']}/{bucket_name}/{file_name}"
     assert result_url == expected_url
- 
- def test_upload_profile_picture_server_error(mock_minio_client):
+        
+def test_upload_profile_picture_server_error(mock_minio_client):
     file_data = io.BytesIO(b"mock file content")
     file_name = "profile-picture.jpg"
     mock_minio_client.put_object.side_effect = Exception("Server error")
