@@ -39,7 +39,7 @@ from app.models.user_model import User
 from uuid import uuid4
 
 import logging
-logger = logging.getlogger(__name__)
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
