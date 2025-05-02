@@ -35,7 +35,7 @@ from app.dependencies import get_settings
 from app.services.email_service import EmailService
 from app.utils.minio import store_image, generate_presigned_url
 from sqlalchemy.future import select
-from app.models.user_model import user
+from app.models.user_model import User
 from uuid import uuid4
 
 import logging
