@@ -15,6 +15,7 @@ from builtins import Exception, range, str
 from datetime import timedelta
 from unittest.mock import AsyncMock, patch
 from uuid import uuid4
+from minio import minio
 # Third-party imports
 import pytest
 from fastapi.testclient import TestClient
@@ -37,6 +38,14 @@ TEST_DATABASE_URL = settings.database_url.replace("postgresql://", "postgresql+a
 engine = create_async_engine(TEST_DATABASE_URL, echo=settings.debug)
 AsyncTestingSessionLocal = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 AsyncSessionScoped = scoped_session(AsyncTestingSessionLocal)
+# Configure MinIO client
+@pytest.fixture
+def minio_client():
+    return Minio("minio:9000",  # Update this to match your host and port
+    access_key="minioadmin",  # Replace with your access key
+    secret_key="minioadmin",  # Replace with your secret key
+    secure=False  # Set to True if using HTTPS
+    )
 @pytest.fixture
 def email_service():
     # Assuming the TemplateManager does not need any arguments for initialization
