@@ -81,12 +81,7 @@ docker-compose up --build
   ```
   ![Docker Hub](screenshots/docker-hub-deployment.png)
   ```
-
-* Profile picture upload feature (MinIO Integration)
-
-  ```
-  ![MinIO feature](screenshots/minio-profile-feature.png)
-  ```
+ 
 
 * Test Coverage summary/report
 
@@ -98,7 +93,7 @@ docker-compose up --build
 
 ## 📝 **Reflection Document**
 
-Please refer to the [Reflection Document](./Final Reflection Paper IS601.docx) for an in-depth review of my project journey, issue resolutions, test coverage strategy, feature implementation details, and personal learnings.
+Please refer to the [https://docs.google.com/document/d/17-3i9zbnsNyt1t1Ncdc-dHwIueFy-XCbfic27DL4idk/edit?usp=sharing](Final Reflection Paper IS601.docx) for an in-depth review of my project journey, issue resolutions, test coverage strategy, feature implementation details, and personal learnings.
 
 ---
 
