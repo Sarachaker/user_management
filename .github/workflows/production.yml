@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-  pull_request_target:
+  pull_request:
     branches:
       - main
 
@@ -24,16 +24,15 @@ jobs:
         ports:
           - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-    minio:
-        image: quay.io/minio/minio
-        ports:
-          - 9000:9000
-          - 9001:9001 
-        options: >-
-          server /data --console-address :9001   
+      minio:
+        image: lazybit/minio
         env:
           MINIO_ROOT_USER: minioadmin
           MINIO_ROOT_PASSWORD: minioadmin
+        ports:
+          - 9000:9000
+          - 9001:9001  
+        options: --health-cmd "curl --silent --fail http://localhost:9000/minio/health/live" --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
       - uses: actions/checkout@v4
       
@@ -54,16 +53,19 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      
-      - name: Wait for PostgreSQL
-        run: |
-            for i in {1..10}; do
-              pg_isready -h localhost -p 5432 && break || sleep 3;
-            done
           
+      - name: Wait for MinIO to be ready
+        run: |
+          for i in {1..10}; do
+            curl -f -v http://localhost:9000/minio/health/live && echo "MinIO is up" && break || echo "Waiting for MinIO..." && sleep 5;
+          done
+        
       - name: Run tests with Pytest
         env:
-          DATABASE_URL: postgresql+asyncpg://user:password@localhost:5432/myappdb  # Configure the DATABASE_URL environment variable for tests
+          MINIO_ROOT_USER: minioadmin
+          MINIO_ROOT_PASSWORD: minioadmin
+          DATABASE_URL: postgresql+asyncpg://user:password@localhost:5432/myappdb
+          MINIO_URL: http://localhost:9000 # Update to use localhost for service
         run: pytest
 
   build-and-push-docker:

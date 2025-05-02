@@ -72,7 +72,6 @@ async def async_client(db_session):
     # Use ASGITransport to run our FastAPI app in httpx.AsyncClient
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://testserver") as client:
-        # override get_db to use our test session
         app.dependency_overrides[get_db] = lambda: db_session
         try:
             yield client
